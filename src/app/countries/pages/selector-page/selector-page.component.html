@@ -23,6 +23,22 @@
       </select>
     </div>
   </div>
+  <div class="row mb-3">
+    <div class="col" *ngIf="borders.length > 0">
+      <label class="form-label">Borders</label>
+      <select class="form-control" formControlName="border">
+        <option value="">-- Select border --</option>
+        <option *ngFor="let border of borders" [value]="border">
+          {{ border }}
+        </option>
+      </select>
+    </div>
+  </div>
+  <div class="row" *ngIf="loading">
+    <div class="col">
+      <div class="alert alert-primary">Loading...</div>
+    </div>
+  </div>
   <div class="row">
     <div class="col d-flex justify-content-end">
       <button class="btn btn-primary" type="submit">Select</button>
