@@ -18,7 +18,7 @@ export class SelectorPageComponent implements OnInit {
   })
   regions: string[] = [];
   countries: Country[] = [];
-  borders: string[] = []
+  borders: Country[] = []
   loading: boolean = false;
 
   constructor(private formBuilder: FormBuilder, private countriesService: CountriesService) { }
@@ -48,11 +48,19 @@ export class SelectorPageComponent implements OnInit {
         this.loading = true;
         // this.myForm.get('border')?.enable();
       }),
-      switchMap(country => this.countriesService.getBorders(country))
+      switchMap(country => this.countriesService.getBorders(country)),
+      tap( ( country ) => {
+        if( !country?.borders || country?.borders.length === 0 ){ 
+          // this.loading = false 
+          this.myForm.get('border')?.setErrors(null);
+        }
+      }),
+      switchMap(countryB => this.countriesService.getCountriesByCode(countryB.borders))
     ).subscribe({
-      next: (country: Country) => {
-        this.borders = country.borders || []
+      next: (borders: Country[]) => {
+        this.borders = borders || []
         this.loading = false;
+        console.log(borders);
       }
     })
   }
